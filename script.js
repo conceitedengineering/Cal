@@ -9,12 +9,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const clearEventsButton = document.getElementById('clear-events');
     const eventInput = document.getElementById('event-input');
 
-    let currentYear = 2024;
-    let currentMonth = 0; // January
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth();
     let events = JSON.parse(localStorage.getItem('calendarEvents')) || {}; // Load events from Local Storage
 
     function initCalendar(year, month) {
-        calendarContainer.innerHTML = '<div class="font-bold text-center">Mon</div><div class="font-bold text-center">Tue</div><div class="font-bold text-center">Wed</div><div class="font-bold text-center">Thu</div><div class="font-bold text-center">Fri</div><div class="font-bold text-center">Sat</div><div class="font-bold text-center">Sun</div>';
+        calendarContainer.innerHTML = '<div class="font-bold text-center text-2xl">Mon</div><div class="font-bold text-center text-2xl">Tue</div><div class="font-bold text-center text-2xl">Wed</div><div class="font-bold text-center text-2xl">Thu</div><div class="font-bold text-center text-2xl">Fri</div><div class="font-bold text-center text-2xl">Sat</div><div class="font-bold text-center text-2xl">Sun</div>';
         monthYearDisplay.innerText = `${new Date(year, month).toLocaleString('en', { month: 'long' })} ${year}`;
 
         const firstDayOfMonth = new Date(year, month, 1).getDay();
@@ -27,13 +27,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
         for (let day = 1; day <= daysInMonth; day++) {
             const dayCell = document.createElement('div');
-            dayCell.className = 'day text-center border border-gray-200 rounded py-2 cursor-pointer font-bold text-3xl hover:bg-gray-100 hover:shadow-md';
+            dayCell.className = 'day text-center border border-gray-200 rounded py-2 cursor-pointer font-bold text-2xl hover:bg-gray-100 hover:shadow-md';
             dayCell.innerText = day;
             dayCell.dataset.date = `${year}-${month + 1}-${day}`;
 
+            // Highlight the current day
+            const today = new Date();
+            if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+                dayCell.classList.add('ring', 'ring-blue-500', 'ring-offset-.5', 'ring-offset-blue-200');
+            }
+
             if (events[dayCell.dataset.date]) {
                 const eventTitle = document.createElement('div');
-                eventTitle.className = 'text-black text-xl mt-1'; // Black text and larger size
+                eventTitle.className = 'text-black text-lg mt-1 text-lg'; // Black text and larger size
                 eventTitle.innerText = events[dayCell.dataset.date];
                 dayCell.appendChild(eventTitle);
             }
@@ -58,9 +64,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         initCalendar(currentYear, currentMonth);
     }
-
-    prevMonthButton.addEventListener('click', () => changeMonth(-1));
-    nextMonthButton.addEventListener('click', () => changeMonth(1));
 
     function saveEvent() {
         const eventDate = eventInput.dataset.date;
