@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         for (let day = 1; day <= daysInMonth; day++) {
             const dayCell = document.createElement('div');
-            dayCell.className = 'day text-center border border-gray-200 rounded py-2 cursor-pointer font-bold text-2xl hover:bg-gray-100 hover:shadow-md';
+            dayCell.className = 'day text-center border border-gray-300 rounded py-2 cursor-pointer font-bold text-5xl hover:bg-gray-150 hover:shadow-md';
             dayCell.innerText = day;
             dayCell.dataset.date = `${year}-${month + 1}-${day}`;
 
@@ -64,6 +64,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         initCalendar(currentYear, currentMonth);
     }
+
+    prevMonthButton.addEventListener('click', () => changeMonth(-1));
+    nextMonthButton.addEventListener('click', () => changeMonth(1));
 
     function saveEvent() {
         const eventDate = eventInput.dataset.date;
